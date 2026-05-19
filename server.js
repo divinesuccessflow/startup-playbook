@@ -552,6 +552,14 @@ app.post('/api/run', async (req, res) => {
     const opusMaxKey = process.env.OPUSMAX_API_KEY || 'sk-ant-opm-wMvTGxBDsZ42nWkZ3xlHUTJda6da3iLE';
     console.log('[DEBUG] opusMaxKey present:', !!opusMaxKey, 'length:', opusMaxKey ? opusMaxKey.length : 0, 'prefix:', opusMaxKey ? opusMaxKey.substring(0,12) : 'n/a');
     if (opusMaxKey && opusMaxKey.length > 10) {
+      const payload = JSON.stringify({
+        model: selectedModel,
+        messages: [{ role: 'user', content: promptText }],
+        max_tokens: 4096
+      });
+      console.log('[DEBUG] About to fetch OpusMax. URL: https://api.opusmax.pro/v1/messages');
+      console.log('[DEBUG] Payload size:', payload.length, 'chars');
+      console.log('[DEBUG] PromptText length:', promptText.length);
       const response = await fetch('https://api.opusmax.pro/v1/messages', {
         method: 'POST',
         headers: {
@@ -559,17 +567,16 @@ app.post('/api/run', async (req, res) => {
           'Authorization': 'Bearer ' + opusMaxKey,
           'anthropic-version': '2023-06-01'
         },
-        body: JSON.stringify({
-          model: selectedModel,
-          messages: [{ role: 'user', content: promptText }],
-          max_tokens: 4096
-        })
+        body: payload
       });
-
+      console.log('[DEBUG] Got response. status:', response.status, 'ok:', response.ok);
       if (response.ok) {
         const data = await response.json();
+        console.log('[DEBUG] JSON parsed. keys:', Object.keys(data), 'content:', data.content ? data.content.length : 'none');
         const output = data.content?.[0]?.text;
+        console.log('[DEBUG] Extracted output length:', output ? output.length : 0);
         if (output) {
+          console.log('[DEBUG] SUCCESS - returning output');
           return res.json({
             success: true,
             output,
