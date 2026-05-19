@@ -547,8 +547,10 @@ app.post('/api/run', async (req, res) => {
   const selectedModel = model || 'claude-opus-4-7';
 
   // Try OpusMax (Claude) — primary provider
+  console.log('[DEBUG api/run] ENTERED. OPUSMAX_API_KEY env var:', typeof process.env.OPUSMAX_API_KEY, process.env.OPUSMAX_API_KEY ? process.env.OPUSMAX_API_KEY.substring(0,15)+'...' : 'UNDEFINED');
   try {
     const opusMaxKey = process.env.OPUSMAX_API_KEY || 'sk-ant-opm-wMvTGxBDsZ42nWkZ3xlHUTJda6da3iLE';
+    console.log('[DEBUG] opusMaxKey present:', !!opusMaxKey, 'length:', opusMaxKey ? opusMaxKey.length : 0, 'prefix:', opusMaxKey ? opusMaxKey.substring(0,12) : 'n/a');
     if (opusMaxKey && opusMaxKey.length > 10) {
       const response = await fetch('https://api.opusmax.pro/v1/messages', {
         method: 'POST',
@@ -580,9 +582,11 @@ app.post('/api/run', async (req, res) => {
         const errText = await response.text();
         console.log('OpusMax error:', response.status, errText.substring(0, 200));
       }
+    } else {
+      console.log('[DEBUG] opusMaxKey too short or empty, skipping. length:', opusMaxKey ? opusMaxKey.length : 0);
     }
   } catch (e) {
-    console.log('OpusMax error:', e.message);
+    console.log('OpusMax error:', e.message, 'name:', e.name);
   }
 
   // Try OpenRouter
