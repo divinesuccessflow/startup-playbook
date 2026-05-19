@@ -557,9 +557,6 @@ app.post('/api/run', async (req, res) => {
         messages: [{ role: 'user', content: promptText }],
         max_tokens: 4096
       });
-      console.log('[DEBUG] About to fetch OpusMax. URL: https://api.opusmax.pro/v1/messages');
-      console.log('[DEBUG] Payload size:', payload.length, 'chars');
-      console.log('[DEBUG] PromptText length:', promptText.length);
       const response = await fetch('https://api.opusmax.pro/v1/messages', {
         method: 'POST',
         headers: {
@@ -569,16 +566,13 @@ app.post('/api/run', async (req, res) => {
         },
         body: payload
       });
-      console.log('[DEBUG] Got response. status:', response.status, 'ok:', response.ok);
       if (response.ok) {
         const data = await response.json();
         console.log('[DEBUG] JSON parsed. keys:', Object.keys(data), 'content:', data.content ? data.content.length : 'none');
         // Find first text block (skip thinking blocks)
         const textBlock = data.content?.find(c => c.type === 'text');
         const output = textBlock?.text || '';
-        console.log('[DEBUG] Extracted output length:', output ? output.length : 0);
         if (output) {
-          console.log('[DEBUG] SUCCESS - returning output');
           return res.json({
             success: true,
             output,
@@ -592,7 +586,6 @@ app.post('/api/run', async (req, res) => {
         console.log('OpusMax error:', response.status, errText.substring(0, 200));
       }
     } else {
-      console.log('[DEBUG] opusMaxKey too short or empty, skipping. length:', opusMaxKey ? opusMaxKey.length : 0);
     }
   } catch (e) {
     console.log('OpusMax error:', e.message, 'name:', e.name);
@@ -679,17 +672,6 @@ app.post('/api/run', async (req, res) => {
 });
 
 app.get('/health', (req, res) => res.json({ status: 'ok', prompts: Object.keys(PROMPTS).length }));
-app.get('/env', (req, res) => {
-  const hasOpus = !!process.env.OPUSMAX_API_KEY;
-  const hasOpenRouter = !!process.env.OPENROUTER_API_KEY;
-  const hasGroq = !!process.env.GROQ_API_KEY;
-  res.json({
-    OPUSMAX: hasOpus ? 'SET (' + process.env.OPUSMAX_API_KEY.substring(0,12) + '...)' : 'MISSING',
-    OPENROUTER: hasOpenRouter ? 'SET' : 'MISSING',
-    GROQ: hasGroq ? 'SET' : 'MISSING',
-    NODE_ENV: process.env.NODE_ENV,
-    PORT: process.env.PORT
-  });
 });
 
 app.listen(PORT, () => {
