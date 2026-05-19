@@ -508,6 +508,29 @@ async function runAllPrompts(){
 });
 
 // API endpoint to run prompts
+app.get('/test-opus', async (req, res) => {
+  try {
+    const key = process.env.OPUSMAX_API_KEY || 'sk-ant-opm-wMvTGxBDsZ42nWkZ3xlHUTJda6da3iLE';
+    const response = await fetch('https://api.opusmax.pro/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + key,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-7',
+        messages: [{ role: 'user', content: 'Reply OK' }],
+        max_tokens: 5
+      })
+    });
+    const data = await response.json();
+    res.json({ status: response.status, ok: response.ok, keys: Object.keys(data), data });
+  } catch(e) {
+    res.json({ error: e.message, name: e.name });
+  }
+});
+
 app.post('/api/run', async (req, res) => {
   const { promptId, startupIdea, model } = req.body;
 
