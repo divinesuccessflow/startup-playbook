@@ -1,6 +1,15 @@
 [build]
 builder = "nixpacks"
+builderConfig = { nixpacksVersion = "1" }
+
+[nixpacks]
+nodeVersion = "20"
 
 [deploy]
-startCommand = "echo 'Static site - no server needed'"
-healthCheckPath = "/"
+startCommand = "npm install && node server.js"
+healthCheckPath = "/health"
+healthCheckTimeout = 10
+
+[environment]
+PORT = "8080"
+NODE_ENV = "production"
