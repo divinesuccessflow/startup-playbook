@@ -573,7 +573,9 @@ app.post('/api/run', async (req, res) => {
       if (response.ok) {
         const data = await response.json();
         console.log('[DEBUG] JSON parsed. keys:', Object.keys(data), 'content:', data.content ? data.content.length : 'none');
-        const output = data.content?.[0]?.text;
+        // Find first text block (skip thinking blocks)
+        const textBlock = data.content?.find(c => c.type === 'text');
+        const output = textBlock?.text || '';
         console.log('[DEBUG] Extracted output length:', output ? output.length : 0);
         if (output) {
           console.log('[DEBUG] SUCCESS - returning output');
