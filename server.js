@@ -643,6 +643,18 @@ app.post('/api/run', async (req, res) => {
 });
 
 app.get('/health', (req, res) => res.json({ status: 'ok', prompts: Object.keys(PROMPTS).length }));
+app.get('/env', (req, res) => {
+  const hasOpus = !!process.env.OPUSMAX_API_KEY;
+  const hasOpenRouter = !!process.env.OPENROUTER_API_KEY;
+  const hasGroq = !!process.env.GROQ_API_KEY;
+  res.json({
+    OPUSMAX: hasOpus ? 'SET (' + process.env.OPUSMAX_API_KEY.substring(0,12) + '...)' : 'MISSING',
+    OPENROUTER: hasOpenRouter ? 'SET' : 'MISSING',
+    GROQ: hasGroq ? 'SET' : 'MISSING',
+    NODE_ENV: process.env.NODE_ENV,
+    PORT: process.env.PORT
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Startup Playbook running on port ${PORT}`);
