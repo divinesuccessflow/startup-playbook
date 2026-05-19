@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Refinement Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a12;--c:#111120;--cb:#0e0e1a;--bd:rgba(255,255,255,.08);--g:#c9a84c;--gl:#e8c96a;--t:#f0ede6;--td:#8a8a9a;--s:#22c55e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6}
+.cn{max-width:860px;margin:0 auto;padding:0 24px}
+header{padding:56px 0 48px;text-align:center;border-bottom:1px solid var(--bd);margin-bottom:48px}
+.bdg{display:inline-block;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--g);border:1px solid rgba(201,168,76,.3);padding:6px 16px;border-radius:50px;margin-bottom:24px}
+h1{font-size:clamp(28px,5vw,48px);font-weight:900;color:#fff;line-height:1.1;margin-bottom:16px}
+h1 span{color:var(--g)}
+header p{font-size:16px;color:var(--td);max-width:540px;margin:0 auto;line-height:1.7}
+.pc{background:var(--c);border:1px solid var(--bd);border-radius:20px;margin-bottom:20px;overflow:hidden}
+.ch{padding:24px 28px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.ch:hover{background:rgba(255,255,255,.02)}
+.n{width:44px;height:44px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--g);flex-shrink:0;margin-right:16px}
+.ci{flex:1}.ct{font-size:18px;font-weight:700;color:#fff;margin-bottom:3px}
+.cd{font-size:13px;color:var(--td)}
+.ctg{font-size:22px;color:var(--td);transition:transform .3s;flex-shrink:0;margin-left:16px;user-select:none}
+.pc.o .ctg{transform:rotate(45deg)}
+.cb{display:none;padding:28px;border-top:1px solid var(--bd);background:rgba(0,0,0,.15)}
+.pc.o .cb{display:block}
+.ps{margin-bottom:22px}.ps:last-child{margin-bottom:0}
+.tag{display:inline-block;font-family:Courier New,monospace;font-size:11px;font-weight:600;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);color:var(--gl);padding:3px 10px;border-radius:4px;margin-bottom:10px}
+.pc2{background:var(--cb);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:18px;font-size:14px;line-height:1.8;color:var(--t);white-space:pre-wrap}
+.ri{display:flex;gap:10px;margin-bottom:7px}.ri:last-child{margin-bottom:0}
+.st{color:var(--g);flex-shrink:0;margin-top:2px;font-size:14px}
+.si{display:flex;gap:10px;margin-bottom:7px}.si:last-child{margin-bottom:0}
+.sn{color:var(--g);font-weight:700;flex-shrink:0;min-width:24px;margin-top:1px}
+.ar{color:var(--gl);font-weight:700}
+.cb2{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);color:var(--gl);font-size:13px;font-weight:600;padding:12px 20px;border-radius:10px;cursor:pointer;transition:all .2s;font-family:Inter,sans-serif;margin-top:20px;width:100%}
+.cb2:hover{background:rgba(201,168,76,.2);transform:translateY(-1px)}
+.cb2.copied{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:var(--s)}
+.cta{text-align:center;padding:64px 0;border-top:1px solid var(--bd);margin-top:48px}
+.cta h2{font-size:28px;font-weight:800;color:#fff;margin-bottom:12px}
+.cta p{font-size:16px;color:var(--td);margin-bottom:32px}
+footer{text-align:center;padding:32px 0;border-top:1px solid var(--bd);font-size:12px;color:var(--td)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(100px);background:#111120;border:1px solid var(--s);color:var(--s);padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;z-index:1000;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media(max-width:600px){.ch{padding:18px 20px}.cb{padding:20px}.pc2{font-size:13px;padding:16px}}
+</style>
+</head>
+<body>
+<div class="cn">
+<header>
+  <div class="bdg">Paul Graham x Claude</div>
+  <h1>Startup Refinement<br><span>Prompt Playbook</span></h1>
+  <p>7 battle-tested prompts to pressure test, validate and sharpen your startup idea before you build the wrong thing.</p>
+</header>
+
+<div class="pc" id="card1">
+  <div class="ch" onclick="tc(1)"><div class="n">01</div><div class="ci"><div class="ct">Pressure Test Your Idea</div><div class="cd">Find every fatal flaw before you waste a month building</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a Paul Graham-style startup evaluator who has reviewed thousands of ideas and knows exactly which ones die in week one and which ones become billion dollar companies.
+</role></div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Pressure test my startup idea the way Paul Graham evaluates YC applications, finding every fatal flaw before I waste a single month building the wrong thing.
+</task></div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never "it has potential but"</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(1,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card2">
+  <div class="ch" onclick="tc(2)"><div class="n">02</div><div class="ci"><div class="ct">Validate the Real Problem</div><div class="cd">Know if people actually pay for this or if it is in your head</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a customer discovery specialist applying Paul Graham's "talk to users" framework — the only way to know if a problem is real is to find people actively suffering from it and willing to pay for a solution.
+</role></div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Validate whether my startup idea solves a real problem people pay for, or a problem I invented in my head that nobody actually has.
+</task></div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never "it has potential but"</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(2,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card3">
+  <div class="ch" onclick="tc(3)"><div class="n">03</div><div class="ci"><div class="ct">Map Your Real Competition</div><div class="cd">Find the invisible competitors before it is too late</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a competitive intelligence analyst applying Paul Graham's "what are people doing now" framework — the most dangerous competitor is never the obvious one, it is the current behavior your product has to replace.
+</role></div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Map every real competitor my startup faces, including the invisible ones most founders never see until it is too late.
+</task></div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never "it has potential but"</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(3,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card4">
+  <div class="ch" onclick="tc(4)"><div class="n">04</div><div class="ci"><div class="ct">Find Your First 10 Customers</div><div class="cd">Build a manual outreach plan before you automate anything</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as an early traction specialist applying Paul Graham's "do things that don't scale" framework — the fastest path to product-market fit is finding 10 people who use and pay for your product before building anything automated.
+</role></div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Build a specific plan to find and convert my first 10 customers, manually, personally, and before building anything automated.
+</task></div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never "it has potential but"</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(4,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card5">
+  <div class="ch" onclick="tc(5)"><div class="n">05</div><div class="ci"><div class="ct">Sharpen Your One-Line Pitch</div><div class="cd">If it takes more than one sentence, you do not understand it</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a positioning expert applying Paul Graham's "make something people want" clarity principle — your pitch is the first test of whether you understand your market, and if it takes more than one sentence, you do not.
+</role></div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Refine my startup pitch until it can be delivered in a single compelling line that makes someone ask for more.
+</task></div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never "it has potential but"</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(5,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card6">
+  <div class="ch" onclick="tc(6)"><div class="n">06</div><div class="ci"><div class="ct">Write a YC-Style Application</div><div class="cd">Every answer must prove you understand your market</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a YC application coach applying Paul Graham's application evaluation criteria — the best applications show, do not tell, and every word proves the founder understands their market.
+</role></div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Evaluate and improve my YC application, making every answer concrete, specific, and impossible to misinterpret.
+</task></div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never "it has potential but"</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(6,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card7">
+  <div class="ch" onclick="tc(7)"><div class="n">07</div><div class="ci"><div class="ct">Design Your First Experiment</div><div class="cd">Learn the truth at the lowest possible cost before building</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a lean startup coach applying Paul Graham's "keep the feature inventory small" principle — every week you spend building without data is a week you might be building the wrong thing.
+</role></div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Design the single most important experiment to run before I build anything else, so I learn the truth about my idea at the lowest possible cost.
+</task></div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never "it has potential but"</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(7,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card1">
+  <div class="ch" onclick="tc(1)"><div class="n">01</div><div class="ci"><div class="ct">Pressure Test Your Idea</div><div class="cd">Find every fatal flaw before you waste a month building</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a Paul Graham-style startup evaluator who has reviewed thousands of ideas and knows exactly which ones die in week one and which ones become billion dollar companies.</div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Pressure test my startup idea the way Paul Graham evaluates YC applications, finding every fatal flaw before I waste a single month building the wrong thing.</div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the core assumption that must be true for the business to work</div><div class="si"><span class="sn">3.</span>Find the most likely reasons this idea fails, specific and ranked by severity</div><div class="si"><span class="sn">4.</span>Test the problem — is this a real pain people pay to solve or a nice-to-have</div><div class="si"><span class="sn">5.</span>Assess the founder-market fit — why am I the right person to build this</div><div class="si"><span class="sn">6.</span>Deliver a brutally honest verdict — strong, weak, or pivot required</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Every flaw must be specific to this idea, no generic startup advice</div><div class="ri"><span class="st">&#9733;</span>Core assumption must be testable before building anything</div><div class="ri"><span class="st">&#9733;</span>Verdict must be direct, never &quot;it has potential but&quot;</div><div class="ri"><span class="st">&#9733;</span>Fatal flaws ranked by severity, most dangerous first</div><div class="ri"><span class="st">&#9733;</span>Include only real flaws, do not pad to hit a number</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Core Assumption &rarr; Fatal Flaws &rarr; Problem Validation &rarr; Founder-Market Fit &rarr; Brutal Verdict</div></div>
+    <button class="cb2" onclick="cp(1,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card2">
+  <div class="ch" onclick="tc(2)"><div class="n">02</div><div class="ci"><div class="ct">Validate the Real Problem</div><div class="cd">Know if people actually pay for this or if it is in your head</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a customer discovery specialist applying Paul Graham&#x27;s &quot;talk to users&quot; framework — the only way to know if a problem is real is to find people actively suffering from it and willing to pay for a solution.</div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Validate whether my startup idea solves a real problem people pay for, or a problem I invented in my head that nobody actually has.</div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea and target customer before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Define the specific pain — exactly what frustration my customer experiences and when</div><div class="si"><span class="sn">3.</span>Identify who has this problem most acutely — the early adopter profile</div><div class="si"><span class="sn">4.</span>Design 5 customer discovery questions that reveal truth without leading the witness</div><div class="si"><span class="sn">5.</span>Define validation criteria — what specific signals prove the problem is real and urgent</div><div class="si"><span class="sn">6.</span>Flag if the problem is a vitamin or a painkiller, and what that means for the business</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Problem must be felt with enough frequency and intensity that customers actively seek a fix</div><div class="ri"><span class="st">&#9733;</span>Early adopter must be a specific person, not a demographic</div><div class="ri"><span class="st">&#9733;</span>Discovery questions must be open-ended and ask about past behavior, never hypothetical intent</div><div class="ri"><span class="st">&#9733;</span>Vitamin vs painkiller verdict must be explicit, never implied</div><div class="ri"><span class="st">&#9733;</span>Test — are people currently cobbling together a solution because nothing exists</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Specific Pain &rarr; Early Adopter Profile &rarr; 5 Discovery Questions &rarr; Validation Criteria &rarr; Vitamin or Painkiller Verdict</div></div>
+    <button class="cb2" onclick="cp(2,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card3">
+  <div class="ch" onclick="tc(3)"><div class="n">03</div><div class="ci"><div class="ct">Map Your Real Competition</div><div class="cd">Find the invisible competitors before it is too late</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a competitive intelligence analyst applying Paul Graham&#x27;s &quot;what are people doing now&quot; framework — the most dangerous competitor is never the obvious one, it is the current behavior your product has to replace.</div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Map every real competitor my startup faces, including the invisible ones most founders never see until it is too late.</div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea and target customer before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify what customers currently do instead of using my product</div><div class="si"><span class="sn">3.</span>Map direct competitors — companies solving the exact same problem</div><div class="si"><span class="sn">4.</span>Map indirect competitors — alternatives customers use that solve the same pain differently</div><div class="si"><span class="sn">5.</span>Identify the real enemy — the behavior or habit my product must replace</div><div class="si"><span class="sn">6.</span>Assess my genuine differentiation — why would someone switch from what they do now</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>&quot;We have no competition&quot; is always wrong — flag it immediately</div><div class="ri"><span class="st">&#9733;</span>Current behavior is always a competitor — never ignore it</div><div class="ri"><span class="st">&#9733;</span>Differentiation must be specific, not &quot;we&#x27;re better&quot; or &quot;we&#x27;re cheaper&quot;</div><div class="ri"><span class="st">&#9733;</span>Every competitor assessed on awareness, switching cost, and satisfaction level</div><div class="ri"><span class="st">&#9733;</span>Test — why would my target customer switch from what they do today</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Current Behavior &rarr; Direct Competitors &rarr; Indirect Competitors &rarr; Real Enemy &rarr; Genuine Differentiation</div></div>
+    <button class="cb2" onclick="cp(3,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card4">
+  <div class="ch" onclick="tc(4)"><div class="n">04</div><div class="ci"><div class="ct">Find Your First 10 Customers</div><div class="cd">Build a manual outreach plan before you automate anything</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as an early traction specialist applying Paul Graham&#x27;s &quot;do things that don&#x27;t scale&quot; framework — the fastest path to product-market fit is finding 10 people who use and pay for your product before building anything automated.</div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Build a specific plan to find and convert my first 10 customers, manually, personally, and before building anything automated.</div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea and target customer before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify exactly where my first 10 customers are right now — specific communities, forums, or networks</div><div class="si"><span class="sn">3.</span>Design the manual outreach approach — how to reach them personally without automation</div><div class="si"><span class="sn">4.</span>Write the first message — specific, personal, and asking for nothing except a conversation</div><div class="si"><span class="sn">5.</span>Define what success looks like with the first 10 — what they must do to prove real demand</div><div class="si"><span class="sn">6.</span>Create a feedback loop — how to use their input to make the product worth paying for</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>First 10 must be found manually — no automation, no cold mass emails</div><div class="ri"><span class="st">&#9733;</span>Specific communities or people — not &quot;people on LinkedIn&quot;</div><div class="ri"><span class="st">&#9733;</span>First message must be one-on-one — written for one person, not a template</div><div class="ri"><span class="st">&#9733;</span>Success means paying customers, not just interested leads</div><div class="ri"><span class="st">&#9733;</span>Feedback must change the product — document what you learn and what you build</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Customer Habitat &rarr; Manual Outreach Plan &rarr; First Message Template &rarr; Success Definition &rarr; Feedback Loop</div></div>
+    <button class="cb2" onclick="cp(4,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card5">
+  <div class="ch" onclick="tc(5)"><div class="n">05</div><div class="ci"><div class="ct">Sharpen Your One-Line Pitch</div><div class="cd">If it takes more than one sentence, you do not understand it</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a positioning expert applying Paul Graham&#x27;s &quot;make something people want&quot; clarity principle — your pitch is the first test of whether you understand your market, and if it takes more than one sentence, you do not.</div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Refine my startup pitch until it can be delivered in a single compelling line that makes someone ask for more.</div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my current startup pitch or description before starting (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify what is actually unique about what I am building</div><div class="si"><span class="sn">3.</span>Strip anything that could apply to a hundred other startups</div><div class="si"><span class="sn">4.</span>Replace vague language with specific, concrete terms</div><div class="si"><span class="sn">5.</span>Test whether someone hearing this for the first time knows exactly what I do and for whom</div><div class="si"><span class="sn">6.</span>Deliver the refined one-liner with a brief explanation of why each word stays</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>One line only — no subheadline, no &quot;basically,&quot; no &quot;it&#x27;s like X but for Y&quot;</div><div class="ri"><span class="st">&#9733;</span>Specific audience — &quot;for&quot; must appear and be a real person type</div><div class="ri"><span class="st">&#9733;</span>Specific outcome — what changes for the customer, not what the product does</div><div class="ri"><span class="st">&#9733;</span>Unique in the room — if a competitor could say the same thing, change it</div><div class="ri"><span class="st">&#9733;</span>Testable in conversation — if they ask &quot;how?&quot; you are already winning</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Current Pitch &rarr; What's Unique &rarr; What Gets Cut &rarr; Refined One-Liner &rarr; Why Each Word Stays</div></div>
+    <button class="cb2" onclick="cp(5,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card6">
+  <div class="ch" onclick="tc(6)"><div class="n">06</div><div class="ci"><div class="ct">Write a YC-Style Application</div><div class="cd">Every answer must prove you understand your market</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a YC application coach applying Paul Graham&#x27;s application evaluation criteria — the best applications show, do not tell, and every word proves the founder understands their market.</div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Evaluate and improve my YC application, making every answer concrete, specific, and impossible to misinterpret.</div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my current application answers or describe my startup</div><div class="si"><span class="sn">2.</span>Flag any answer that uses startup jargon, vague promises, or passive voice</div><div class="si"><span class="sn">3.</span>Identify the strongest answer — where does the founder&#x27;s expertise show</div><div class="si"><span class="sn">4.</span>Find the weakest answer — where does the application dodge a hard question</div><div class="si"><span class="sn">5.</span>Rewrite each answer with concrete specifics — numbers, stories, evidence</div><div class="si"><span class="sn">6.</span>Deliver the improved version with notes on what changed and why</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>No startup cliches — &quot;disrupt,&quot; &quot;revolutionary,&quot; &quot;game-changer,&quot; &quot;AI-powered&quot;</div><div class="ri"><span class="st">&#9733;</span>Every claim backed by a specific example or number</div><div class="ri"><span class="st">&#9733;</span>Founders must show, not claim — &quot;I built X for Y people&quot; beats &quot;I have deep expertise&quot;</div><div class="ri"><span class="st">&#9733;</span>Difficult questions answered directly — never deflect or say &quot;not applicable&quot;</div><div class="ri"><span class="st">&#9733;</span>The application should read like someone with skin in the game wrote it</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Current Answer &rarr; Jargon Flagged &rarr; Strength/Weakness &rarr; Improved Answer &rarr; Why It Works</div></div>
+    <button class="cb2" onclick="cp(6,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="pc" id="card7">
+  <div class="ch" onclick="tc(7)"><div class="n">07</div><div class="ci"><div class="ct">Design Your First Experiment</div><div class="cd">Learn the truth at the lowest possible cost before building</div></div><div class="ctg">+</div></div>
+  <div class="cb">
+    <div class="ps"><div class="tag">&lt;role&gt;</div><div class="pc2">Act as a lean startup coach applying Paul Graham&#x27;s &quot;keep the feature inventory small&quot; principle — every week you spend building without data is a week you might be building the wrong thing.</div></div>
+    <div class="ps"><div class="tag">&lt;task&gt;</div><div class="pc2">Design the single most important experiment to run before I build anything else, so I learn the truth about my idea at the lowest possible cost.</div></div>
+    <div class="ps"><div class="tag">&lt;steps&gt;</div><div class="pc2"><div class="si"><span class="sn">1.</span>Ask for my startup idea and what I am currently building (skip if already provided)</div><div class="si"><span class="sn">2.</span>Identify the biggest assumption — the thing that if false, the whole business fails</div><div class="si"><span class="sn">3.</span>Design one experiment that directly tests that assumption</div><div class="si"><span class="sn">4.</span>Specify exactly what success looks like — the specific outcome that proves the assumption</div><div class="si"><span class="sn">5.</span>Define the minimum viable version of the experiment — no more work than needed to learn</div><div class="si"><span class="sn">6.</span>Set a deadline — when will I know if this assumption is validated or busted</div></div></div>
+    <div class="ps"><div class="tag">&lt;rules&gt;</div><div class="pc2"><div class="ri"><span class="st">&#9733;</span>Experiment must test the biggest assumption, not a minor detail</div><div class="ri"><span class="st">&#9733;</span>Success criteria must be binary — either the assumption holds or it does not</div><div class="ri"><span class="st">&#9733;</span>Minimum viable — no full product, no perfect landing page, no full feature set</div><div class="ri"><span class="st">&#9733;</span>Deadline forces action — &quot;when I have time&quot; never comes</div><div class="ri"><span class="st">&#9733;</span>If the experiment fails, the response must include an honest pivot or kill decision</div></div></div>
+    <div class="ps"><div class="tag">&lt;output&gt;</div><div class="pc2">Biggest Assumption &rarr; Experiment Design &rarr; Success Criteria &rarr; Minimum Build &rarr; Deadline + Kill/Continue Decision</div></div>
+    <button class="cb2" onclick="cp(7,event)">Copy Full Prompt</button>
+  </div>
+</div>
+<div class="cta">
+  <h2>Ready to use these?</h2>
+  <p>Open Claude, paste any prompt, and add your startup idea. That is it.</p>
+</div>
+</div>
+<footer>Source: @codingknowledge &mdash; Paul Graham x Claude evaluation framework</footer>
+<div class="toast" id="toast"></div>
+<script>
+const P={
+1:`<role>
+Act as a Paul Graham-style startup evaluator who has reviewed thousands of ideas and knows exactly which ones die in week one and which ones become billion dollar companies.
+</role>
+
+<task>
+Pressure test my startup idea the way Paul Graham evaluates YC applications, finding every fatal flaw before I waste a single month building the wrong thing.
+</task>
+
+<steps>
+1. Ask for my startup idea description before starting (skip if already provided)
+2. Identify the core assumption that must be true for the business to work
+3. Find the most likely reasons this idea fails, specific and ranked by severity
+4. Test the problem — is this a real pain people pay to solve or a nice-to-have
+5. Assess the founder-market fit — why am I the right person to build this
+6. Deliver a brutally honest verdict — strong, weak, or pivot required
+</steps>
+
+<rules>
+★ Every flaw must be specific to this idea, no generic startup advice
+★ Core assumption must be testable before building anything
+★ Verdict must be direct, never "it has potential but"
+★ Fatal flaws ranked by severity, most dangerous first
+★ Include only real flaws, do not pad to hit a number
+</rules>
+
+<output>
+Core Assumption > Fatal Flaws > Problem Validation > Founder-Market Fit > Brutal Verdict
+</output>`,
+
+2:`<role>
+Act as a customer discovery specialist applying Paul Graham's "talk to users" framework — the only way to know if a problem is real is to find people actively suffering from it and willing to pay for a solution.
+</role>
+
+<task>
+Validate whether my startup idea solves a real problem people pay for, or a problem I invented in my head that nobody actually has.
+</task>
+
+<steps>
+1. Ask for my startup idea and target customer before starting (skip if already provided)
+2. Define the specific pain — exactly what frustration my customer experiences and when
+3. Identify who has this problem most acutely — the early adopter profile
+4. Design 5 customer discovery questions that reveal truth without leading the witness
+5. Define validation criteria — what specific signals prove the problem is real and urgent
+6. Flag if the problem is a vitamin or a painkiller, and what that means for the business
+</steps>
+
+<rules>
+★ Problem must be felt with enough frequency and intensity that customers actively seek a fix
+★ Early adopter must be a specific person, not a demographic
+★ Discovery questions must be open-ended and ask about past behavior, never hypothetical intent
+★ Vitamin vs painkiller verdict must be explicit, never implied
+★ Test — are people currently cobbling together a solution because nothing exists
+</rules>
+
+<output>
+Specific Pain > Early Adopter Profile > 5 Discovery Questions > Validation Criteria > Vitamin or Painkiller Verdict
+</output>`,
+
+3:`<role>
+Act as a competitive intelligence analyst applying Paul Graham's "what are people doing now" framework — the most dangerous competitor is never the obvious one, it is the current behavior your product has to replace.
+</role>
+
+<task>
+Map every real competitor my startup faces, including the invisible ones most founders never see until it is too late.
+</task>
+
+<steps>
+1. Ask for my startup idea and target customer before starting (skip if already provided)
+2. Identify what customers currently do instead of using my product
+3. Map direct competitors — companies solving the exact same problem
+4. Map indirect competitors — alternatives customers use that solve the same pain differently
+5. Identify the real enemy — the behavior or habit my product must replace
+6. Assess my genuine differentiation — why would someone switch from what they do now
+</steps>
+
+<rules>
+★ "We have no competition" is always wrong — flag it immediately
+★ Current behavior is always a competitor — never ignore it
+★ Differentiation must be specific, not "we're better" or "we're cheaper"
+★ Every competitor assessed on awareness, switching cost, and satisfaction level
+★ Test — why would my target customer switch from what they do today
+</rules>
+
+<output>
+Current Behavior > Direct Competitors > Indirect Competitors > Real Enemy > Genuine Differentiation
+</output>`,
+
+4:`<role>
+Act as an early traction specialist applying Paul Graham's "do things that don't scale" framework — the fastest path to product-market fit is finding 10 people who use and pay for your product before building anything automated.
+</role>
+
+<task>
+Build a specific plan to find and convert my first 10 customers, manually, personally, and before building anything automated.
+</task>
+
+<steps>
+1. Ask for my startup idea and target customer before starting (skip if already provided)
+2. Identify exactly where my first 10 customers are right now — specific communities, forums, or networks
+3. Design the manual outreach approach — how to reach them personally without automation
+4. Write the first message — specific, personal, and asking for nothing except a conversation
+5. Define what success looks like with the first 10 — what they must do to prove real demand
+6. Create a feedback loop — how to use their input to make the product worth paying for
+</steps>
+
+<rules>
+★ First 10 must be found manually — no automation, no cold mass emails
+★ Specific communities or people — not "people on LinkedIn"
+★ First message must be one-on-one — written for one person, not a template
+★ Success means paying customers, not just interested leads
+★ Feedback must change the product — document what you learn and what you build
+</rules>
+
+<output>
+Customer Habitat > Manual Outreach Plan > First Message Template > Success Definition > Feedback Loop
+</output>`,
+
+5:`<role>
+Act as a positioning expert applying Paul Graham's "make something people want" clarity principle — your pitch is the first test of whether you understand your market, and if it takes more than one sentence, you do not.
+</role>
+
+<task>
+Refine my startup pitch until it can be delivered in a single compelling line that makes someone ask for more.
+</task>
+
+<steps>
+1. Ask for my current startup pitch or description before starting (skip if already provided)
+2. Identify what is actually unique about what I am building
+3. Strip anything that could apply to a hundred other startups
+4. Replace vague language with specific, concrete terms
+5. Test whether someone hearing this for the first time knows exactly what I do and for whom
+6. Deliver the refined one-liner with a brief explanation of why each word stays
+</steps>
+
+<rules>
+★ One line only — no subheadline, no "basically," no "it's like X but for Y"
+★ Specific audience — "for" must appear and be a real person type
+★ Specific outcome — what changes for the customer, not what the product does
+★ Unique in the room — if a competitor could say the same thing, change it
+★ Testable in conversation — if they ask "how?" you are already winning
+</rules>
+
+<output>
+Current Pitch > What's Unique > What Gets Cut > Refined One-Liner > Why Each Word Stays
+</output>`,
+
+6:`<role>
+Act as a YC application coach applying Paul Graham's application evaluation criteria — the best applications show, do not tell, and every word proves the founder understands their market.
+</role>
+
+<task>
+Evaluate and improve my YC application, making every answer concrete, specific, and impossible to misinterpret.
+</task>
+
+<steps>
+1. Ask for my current application answers or describe my startup
+2. Flag any answer that uses startup jargon, vague promises, or passive voice
+3. Identify the strongest answer — where does the founder's expertise show
+4. Find the weakest answer — where does the application dodge a hard question
+5. Rewrite each answer with concrete specifics — numbers, stories, evidence
+6. Deliver the improved version with notes on what changed and why
+</steps>
+
+<rules>
+★ No startup cliches — "disrupt," "revolutionary," "game-changer," "AI-powered"
+★ Every claim backed by a specific example or number
+★ Founders must show, not claim — "I built X for Y people" beats "I have deep expertise"
+★ Difficult questions answered directly — never deflect or say "not applicable"
+★ The application should read like someone with skin in the game wrote it
+</rules>
+
+<output>
+Current Answer > Jargon Flagged > Strength/Weakness > Improved Answer > Why It Works
+</output>`,
+
+7:`<role>
+Act as a lean startup coach applying Paul Graham's "keep the feature inventory small" principle — every week you spend building without data is a week you might be building the wrong thing.
+</role>
+
+<task>
+Design the single most important experiment to run before I build anything else, so I learn the truth about my idea at the lowest possible cost.
+</task>
+
+<steps>
+1. Ask for my startup idea and what I am currently building (skip if already provided)
+2. Identify the biggest assumption — the thing that if false, the whole business fails
+3. Design one experiment that directly tests that assumption
+4. Specify exactly what success looks like — the specific outcome that proves the assumption
+5. Define the minimum viable version of the experiment — no more work than needed to learn
+6. Set a deadline — when will I know if this assumption is validated or busted
+</steps>
+
+<rules>
+★ Experiment must test the biggest assumption, not a minor detail
+★ Success criteria must be binary — either the assumption holds or it does not
+★ Minimum viable — no full product, no perfect landing page, no full feature set
+★ Deadline forces action — "when I have time" never comes
+★ If the experiment fails, the response must include an honest pivot or kill decision
+</rules>
+
+<output>
+Biggest Assumption > Experiment Design > Success Criteria > Minimum Build > Deadline + Kill/Continue Decision
+</output>`
+};
+
+function tc(n){
+  var c=document.getElementById('card'+n);
+  var isOpen=c.classList.contains('o');
+  document.querySelectorAll('.pc').forEach(function(pc){pc.classList.remove('o')});
+  if(!isOpen)c.classList.add('o');
+}
+function cp(n,e){
+  e.stopPropagation();
+  var txt=P[n];
+  var btn=e.target;
+  navigator.clipboard.writeText(txt).then(function(){
+    btn.textContent='Copied!';
+    btn.classList.add('copied');
+    var t=document.getElementById('toast');
+    t.textContent='Prompt copied to clipboard!';
+    t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show')},2000);
+    setTimeout(function(){
+      btn.textContent='Copy Full Prompt';
+      btn.classList.remove('copied');
+    },2000);
+  }).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=txt;
+    ta.style.position='fixed';
+    ta.style.opacity='0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent='Copied!';
+    btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='Copy Full Prompt';btn.classList.remove('copied')},2000);
+  });
+}
+</script>
+</body>
+</html>
