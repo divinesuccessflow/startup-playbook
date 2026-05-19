@@ -357,12 +357,9 @@ footer a{color:var(--g);text-decoration:none}
   <textarea id="startupIdea" placeholder="e.g. A lending app for small businesses in India that uses alternative data for credit scoring..."></textarea>
   <div class="controls">
     <select id="modelSelect">
-      <option value="anthropic/claude-opus-4-7">Claude Opus 4.7 (Recommended)</option>
-      <option value="anthropic/claude-sonnet-4-6">Claude Sonnet 4.6</option>
-      <option value="openai/gpt-4o">GPT-4o</option>
-      <option value="google/gemini-2.5-pro">Gemini 2.5 Pro</option>
-      <option value="meta-llama/llama-3.3-70b-instruct">Llama 3.3 70B (Free)</option>
-      <option value="deepseek/deepseek-chat-v3-0324">DeepSeek V3 (Free)</option>
+      <option value="claude-opus-4-7">Claude Opus 4.7 (Recommended)</option>
+      <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
+      <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (Fast)</option>
     </select>
     <button class="run-all-btn" id="runAllBtn" onclick="runAllPrompts()">Run All 7 Prompts</button>
   </div>
@@ -524,7 +521,46 @@ app.post('/api/run', async (req, res) => {
   }
 
   const promptText = buildPromptText(promptId, startupIdea);
-  const selectedModel = model || 'anthropic/claude-opus-4-7';
+  const selectedModel = model || 'claude-opus-4-7';
+
+  // Try OpusMax (Claude) — primary provider
+  try {
+    const opusMaxKey = process.env.OPUSMAX_API_KEY || 'sk-ant-opm-wMvTGxBDsZ42nWkZ3xlHUTJda6da3iLE';
+    if (opusMaxKey && opusMaxKey.length > 10) {
+      const response = await fetch('https://api.opusmax.pro/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + opusMaxKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: selectedModel,
+          messages: [{ role: 'user', content: promptText }],
+          max_tokens: 4096
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const output = data.content?.[0]?.text;
+        if (output) {
+          return res.json({
+            success: true,
+            output,
+            model: 'opusmax/' + selectedModel,
+            promptId: parseInt(promptId),
+            promptTitle: promptData.title
+          });
+        }
+      } else {
+        const errText = await response.text();
+        console.log('OpusMax error:', response.status, errText.substring(0, 200));
+      }
+    }
+  } catch (e) {
+    console.log('OpusMax error:', e.message);
+  }
 
   // Try OpenRouter
   try {
@@ -601,8 +637,8 @@ app.post('/api/run', async (req, res) => {
   }
 
   res.status(503).json({
-    error: 'No AI provider configured. Set OPENROUTER_API_KEY or GROQ_API_KEY as environment variables.',
-    hint: 'Get a free OpenRouter key at openrouter.ai — $1 credit is enough for 500+ prompts.'
+      error: 'No AI provider available. Set OPUSMAX_API_KEY as environment variable.',
+    hint: 'The OpusMax API key is pre-configured. Check server logs if the request failed.'
   });
 });
 
